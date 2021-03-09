@@ -1,0 +1,74 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>This job will run the data analyzer. &#xd;
+&#xd;
+The data analyzer will analyze each variable and programmatically attempt to determine whether it&apos;s values should be characterized as numeric or text.  &#xd;
+&#xd;
+</description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.3.0">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/hms-dbmi/ETL-MissionControl-dbgap-submodule</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+find data/  -exec rm -rf {} \;
+
+# Managed Inputs
+aws s3 cp s3://avillach-73-bdcatalyst-etl/general/resources/Managed_Inputs.csv data/
+
+
+### comment out the IFS statemeent and use the study ids array for testing only!
+IFS=$&apos;\r\n&apos; GLOBIGNORE=&apos;*&apos; command eval  &apos;studyids=($(cut -d , -f 1 data/Managed_Inputs.csv | grep -v Study\ Abbr | uniq))&apos;
+#studyids=(&quot;fhs&quot;)
+
+mkdir data
+mkdir completed
+mkdir hierarchies
+mkdir processing
+
+# run data analyzer
+for studyid in ${studyids[@]}; do
+
+   find data/ -name &quot;phs*&quot; -exec rm -rf {} \;
+
+   find completed/ -type f -exec rm -rf {} \;
+   
+   rm -rf mappings/mapping.csv
+   
+   aws s3 cp s3://avillach-73-bdcatalyst-etl/${studyid,,}/decoded_data/ data/ --recursive
+
+   aws s3 cp s3://avillach-73-bdcatalyst-etl/${studyid,,}/mappings/mapping.csv mappings/
+
+   java -jar jars/DataAnalyzer.jar -trialid ${studyid^^}
+
+   aws s3 cp mappings/mapping.csv s3://avillach-73-bdcatalyst-etl/${studyid,,}/mappings/mapping.csv
+
+done
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

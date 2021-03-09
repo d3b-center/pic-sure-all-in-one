@@ -38,6 +38,57 @@
     </hudson.model.AllView>
     <listView>
       <owner class="hudson" reference="../../.."/>
+      <name>ETL</name>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+      <jobNames>
+        <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView/jobNames/comparator"/>
+        <string>All Concept Data Merge</string>
+        <string>Check Consents Counts</string>
+        <string>Clean invalid patients and get concept counts</string>
+        <string>Cleanup Patients</string>
+        <string>Collect File Identifiers</string>
+        <string>configure gen3-client</string>
+        <string>Curate Mapping Files</string>
+        <string>Data Merge</string>
+        <string>Decode Data</string>
+        <string>Generate All Concepts</string>
+        <string>Generate Global All Concepts</string>
+        <string>Generate Javabins</string>
+        <string>Global Var Generator</string>
+        <string>Harmonized - Build Data Set</string>
+        <string>Harmonized - Build Patient Mapping</string>
+        <string>Initialize Patient Num Tracker</string>
+        <string>Manual Metadata Count Updater</string>
+        <string>Merge Global Concepts</string>
+        <string>Metadata Generator</string>
+        <string>Patient count From Patient Mapping</string>
+        <string>Phenotype Data Load Pipeline</string>
+        <string>Prep Data</string>
+        <string>Pull raw data from gen3</string>
+        <string>Run data analyzer</string>
+        <string>Set Patient Sequences</string>
+        <string>testing</string>
+        <string>Update Managed Inputs</string>
+        <string>Update Patient Mappings</string>
+        <string>Variant Data Validator</string>
+        <string>VCF Remapper</string>
+      </jobNames>
+      <jobFilters/>
+      <columns>
+        <hudson.views.StatusColumn/>
+        <hudson.views.WeatherColumn/>
+        <hudson.views.JobColumn/>
+        <hudson.views.LastSuccessColumn/>
+        <hudson.views.LastFailureColumn/>
+        <hudson.views.LastDurationColumn/>
+        <hudson.views.BuildButtonColumn/>
+      </columns>
+      <recurse>false</recurse>
+    </listView>
+    <listView>
+      <owner class="hudson" reference="../../.."/>
       <name>PIC-SURE Builds</name>
       <filterExecutors>false</filterExecutors>
       <filterQueue>false</filterQueue>

@@ -1,0 +1,62 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.3.0">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/hms-dbmi/ETL-MissionControl-dbgap-submodule</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+
+mkdir data
+
+mkdir completed
+
+find data/ -type f -exec rm -rf {} \;
+
+find completed/ -type f -exec rm -rf {} \;
+
+mkdir -p /opt/local/hpds/all/
+
+aws s3 cp s3://avillach-73-bdcatalyst-etl/general/hpds/genomics_javabins/variantStore.javabin /opt/local/hpds/all/
+
+aws s3 cp s3://avillach-73-bdcatalyst-etl/general/hpds/genomics_javabins/vcfIndex.tsv data/
+
+aws s3 cp s3://avillach-73-bdcatalyst-etl/general/completed/GLOBAL_allConcepts.csv data/
+
+java -jar jars/VcfIndexSync.jar
+
+mv completed/mappings.csv /opt/local/hpds/mappings.csv
+
+java -cp jars/etl-1.0-SNAPSHOT.jar edu.harvard.hms.dbmi.avillach.hpds.data.genotype.util.RemapPatientIds
+
+ts=$(date +&quot;%m-%d-%y&quot;)
+
+aws s3 cp /opt/local/hpds/all/variantStoreRemapped.javabin s3://avillach-73-bdcatalyst-etl/general/hpds/genomics_javabins/variantStoreRemapped_${ts}.javabin</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

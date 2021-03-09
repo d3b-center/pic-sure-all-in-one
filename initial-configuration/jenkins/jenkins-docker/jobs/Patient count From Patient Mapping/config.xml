@@ -1,0 +1,38 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+
+# Managed Inputs
+aws s3 cp s3://avillach-73-bdcatalyst-etl/general/resources/Managed_Inputs.csv data/
+
+IFS=$&apos;\r\n&apos; GLOBIGNORE=&apos;*&apos; command eval  &apos;studyids=($(cut -d , -f 1 data/Managed_Inputs.csv | grep -v Study\ Abbr | uniq))&apos;
+
+mkdir data
+mkdir completed
+mkdir hierarchies
+mkdir processing
+
+for studyid in ${studyids[@]}; do
+
+   aws s3 cp s3://avillach-73-bdcatalyst-etl/${studyid,,}/data/${studyid^^}_PatientMapping.v2.csv data/ --quiet
+   echo ${studyid,,}
+   wc -l data/${studyid^^}_PatientMapping.v2.csv 
+done</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
