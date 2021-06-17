@@ -8,6 +8,7 @@ aws_infra_ec2_module {
     domain_external      = "d3b.io"
     domain_internal      = "d3b.io"
     ec2_instance_type    = "m5.8xlarge"
+    public_subnet        = "true"
     root_volume_size     = "100"
     volume_size          = "100"
     module_branch        = "feature/test-network-module"
