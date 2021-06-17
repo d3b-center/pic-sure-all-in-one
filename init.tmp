@@ -1,0 +1,1 @@
+sudo yum install -y zip unzip,curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip,unzip awscliv2.zip,sudo ./aws/install,sudo aws s3 sync s3://d3b-devops-bucket/gic-instance/playbook/ ~/,sudo chmod +x ~/start.sh,~/start.sh
