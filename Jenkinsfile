@@ -1,4 +1,4 @@
-@Library(value="kids-first/aws-infra-jenkins-shared-libraries", changelog=false) _
+@Library(value="kids-first/aws-infra-jenkins-shared-libraries@feature/open_port", changelog=false) _
 aws_infra_ec2_module {
     projectName          = "gic-instance"
     environments         = "prd"
