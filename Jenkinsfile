@@ -6,4 +6,5 @@ aws_infra_ec2_module {
     open_port            = "443"
     domain_external      = "d3b.io"
     domain_internal      = "d3b.io"
+    ec2_instance_type    = "m5.8xlarge"
 }
